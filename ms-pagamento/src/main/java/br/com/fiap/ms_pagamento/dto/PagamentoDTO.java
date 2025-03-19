@@ -1,5 +1,6 @@
 package br.com.fiap.ms_pagamento.dto;
 
+import br.com.fiap.ms_pagamento.entity.Pagamento;
 import br.com.fiap.ms_pagamento.entity.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,5 +38,16 @@ public class PagamentoDTO {
     @NotNull(message = "Forma de Pagamento ID é obrigatorio")
     private Long formaDePaagamentoId;
 
+    public PagamentoDTO(Pagamento entity){
+        id = entity.getId();
+        valor = entity.getValor();
+        nome = entity.getNome();
+        numeroDoCartao = entity.getNumeroDoCartao();
+        validade = entity.getValidade();
+        codigoDeSeguranca = entity.getCodigoDeSeguranca();
+        status = entity.getStatus();
+        pedidoId = entity.getPeriodoId();
+        formaDePaagamentoId = entity.getFormaDePagamentoId();
+    }
 
 }
