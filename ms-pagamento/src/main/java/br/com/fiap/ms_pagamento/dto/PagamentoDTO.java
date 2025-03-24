@@ -23,7 +23,7 @@ public class PagamentoDTO {
     @NotNull(message = "Campo Obrigatorio")
     @Positive(message = "O valor do pagamento deve ser um numero positivo")
     private BigDecimal valor;
-    @Size(max = 100, message = "Nome deve ter até 100 caracteres")
+    @Size(min = 2,max = 100, message = "Nome deve ter entre 2 a 100 caracteres")
     private String nome;
     @Size(max = 19, message = "Numero do cartão deve ter no maximo 19 caracteres")
     private String numeroDoCartao;
@@ -36,7 +36,7 @@ public class PagamentoDTO {
     @NotNull(message = "Pedido ID é obrigatorio")
     private Long pedidoId;
     @NotNull(message = "Forma de Pagamento ID é obrigatorio")
-    private Long formaDePaagamentoId;
+    private Long formaDePagamentoId;
 
     public PagamentoDTO(Pagamento entity){
         id = entity.getId();
@@ -47,7 +47,7 @@ public class PagamentoDTO {
         codigoDeSeguranca = entity.getCodigoDeSeguranca();
         status = entity.getStatus();
         pedidoId = entity.getPeriodoId();
-        formaDePaagamentoId = entity.getFormaDePagamentoId();
+        formaDePagamentoId = entity.getFormaDePagamentoId();
     }
 
 }
