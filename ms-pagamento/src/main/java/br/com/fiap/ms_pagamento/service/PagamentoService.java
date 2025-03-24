@@ -19,6 +19,6 @@ public class PagamentoService {
     @Transactional(readOnly = true)
     public List<PagamentoDTO> getAll(){
         List<Pagamento> pagamentos = repository.findAll();
-        return pagamentos.stream().map(Pagamento::new).collect(Collectors.toList());
+        return pagamentos.stream().map(PagamentoDTO::new).collect(Collectors.toList());
     }
 }
