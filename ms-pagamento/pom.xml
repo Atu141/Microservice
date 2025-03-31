@@ -8,11 +8,11 @@
 		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.fiap</groupId>
+	<groupId>com.github.cidarosa</groupId>
 	<artifactId>ms-pagamento</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms-pagamento</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Microsserviço de Pagamentos</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -76,6 +76,7 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+							<version>1.18.34</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>

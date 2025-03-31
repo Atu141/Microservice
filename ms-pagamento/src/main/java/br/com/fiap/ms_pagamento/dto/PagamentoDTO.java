@@ -46,7 +46,7 @@ public class PagamentoDTO {
         validade = entity.getValidade();
         codigoDeSeguranca = entity.getCodigoDeSeguranca();
         status = entity.getStatus();
-        pedidoId = entity.getPeriodoId();
+        pedidoId = entity.getPediodoId();
         formaDePagamentoId = entity.getFormaDePagamentoId();
     }
 

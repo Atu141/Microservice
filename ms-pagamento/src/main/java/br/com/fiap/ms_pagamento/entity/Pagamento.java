@@ -26,7 +26,7 @@ public class Pagamento {
     @Enumerated(value = EnumType.STRING)
     private Status status;
     @Column(nullable = false)
-    private Long periodoId;
+    private Long pediodoId;
     @Column(nullable = false)
     private Long formaDePagamentoId;        //1 - Dinheiro | 2 - Cartão | 3 - Pix
 }
