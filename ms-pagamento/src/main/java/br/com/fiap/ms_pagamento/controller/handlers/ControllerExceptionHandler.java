@@ -2,7 +2,7 @@ package br.com.fiap.ms_pagamento.controller.handlers;
 
 import br.com.fiap.ms_pagamento.controller.handlers.dto.CustomErrorDTO;
 import br.com.fiap.ms_pagamento.controller.handlers.dto.ValidationErrorDTO;
-import br.com.fiap.ms_pagamento.service.exceptions.ResorceNotFoundException;
+import br.com.fiap.ms_pagamento.service.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,8 @@ import java.time.Instant;
 public class ControllerExceptionHandler {
 
     //   @ExceptionHandler - definimos qual a exceção que iremos tratar
-    @ExceptionHandler(ResorceNotFoundException.class) //nossa classe
-    public ResponseEntity<CustomErrorDTO> handleResourceNotFound(ResorceNotFoundException e,
+    @ExceptionHandler(ResourceNotFoundException.class) //nossa classe
+    public ResponseEntity<CustomErrorDTO> handleResourceNotFound(ResourceNotFoundException e,
                                                                  HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND; //404
         CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(),

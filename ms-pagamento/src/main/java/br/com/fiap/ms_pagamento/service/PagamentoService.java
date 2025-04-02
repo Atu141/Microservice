@@ -4,7 +4,7 @@ import br.com.fiap.ms_pagamento.dto.PagamentoDTO;
 import br.com.fiap.ms_pagamento.entity.Pagamento;
 import br.com.fiap.ms_pagamento.entity.Status;
 import br.com.fiap.ms_pagamento.repository.PagamentoRepository;
-import br.com.fiap.ms_pagamento.service.exceptions.ResorceNotFoundException;
+import br.com.fiap.ms_pagamento.service.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +25,13 @@ public class PagamentoService {
         return pagamentos.stream().map(PagamentoDTO::new).collect(Collectors.toList());
     }
 
-
     @Transactional(readOnly = true)
     public PagamentoDTO getById(Long id){
         Pagamento entity = repository.findById(id).orElseThrow(
-                () -> new ResorceNotFoundException("Recurso não encontrado ID:" + id)
+                () -> new ResourceNotFoundException("Recurso não encontrado. ID: " + id)
         );
         return new PagamentoDTO(entity);
     }
-
 
     @Transactional
     public PagamentoDTO createPagamento(PagamentoDTO dto){
@@ -44,38 +42,36 @@ public class PagamentoService {
         return new PagamentoDTO(entity);
     }
 
-    private void copyDtoToEntity(PagamentoDTO dto, Pagamento entity) {
-        entity.setValor(dto.getValor());
-        entity.setNome(dto.getNome());
-        entity.setNumeroDoCartao(dto.getNumeroDoCartao());
-        entity.setValidade(dto.getValidade());
-        entity.setCodigoDeSeguranca(dto.getCodigoDeSeguranca());
-        entity.setPediodoId(dto.getPedidoId());
-        entity.setFormaDePagamentoId(dto.getFormaDePagamentoId());
-    }
-
     @Transactional
-    public PagamentoDTO updateProduto(Long id, PagamentoDTO dto){
+    public PagamentoDTO updatePagamento(Long id, PagamentoDTO dto){
+
         try{
             Pagamento entity = repository.getReferenceById(id);
             copyDtoToEntity(dto, entity);
             entity.setStatus(dto.getStatus());
             entity = repository.save(entity);
             return new PagamentoDTO(entity);
-        }catch (EntityNotFoundException e){
-            throw new ResorceNotFoundException("Recurso não encontrado ID:" + id);
+        } catch (EntityNotFoundException e){
+            throw  new ResourceNotFoundException("Recurso não encontrado. ID: " + id);
         }
-
     }
-
 
     @Transactional
     public void deletePagamento(Long id){
-        if (!repository.existsById(id)){
-            throw new ResorceNotFoundException("Recurso não encontrado. ID:" + id);
+        if(!repository.existsById(id)){
+            throw new ResourceNotFoundException("Recurso não encontrado. ID: " + id);
         }
-
         repository.deleteById(id);
     }
 
+    private void copyDtoToEntity(PagamentoDTO dto, Pagamento entity) {
+        entity.setValor(dto.getValor());
+        entity.setNome(dto.getNome());
+        entity.setNumeroDoCartao(dto.getNumeroDoCartao());
+        entity.setValidade(dto.getValidade());
+        entity.setCodigoDeSeguranca(dto.getCodigoDeSeguranca());
+        entity.setPedidoId(dto.getPedidoId());
+        entity.setFormaDePagamentoId(dto.getFormaDePagamentoId());
+
+    }
 }

@@ -1,6 +1,5 @@
 package br.com.fiap.ms_pagamento.controller;
 
-
 import br.com.fiap.ms_pagamento.dto.PagamentoDTO;
 import br.com.fiap.ms_pagamento.service.PagamentoService;
 import jakarta.validation.Valid;
@@ -13,7 +12,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/pagamentos")
+@RequestMapping("/pagamentos")
 public class PagamentoController {
 
     @Autowired
@@ -26,13 +25,13 @@ public class PagamentoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PagamentoDTO> getNyId(@PathVariable Long id){
+    public ResponseEntity<PagamentoDTO> getById( @PathVariable Long id){
         PagamentoDTO dto = service.getById(id);
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public ResponseEntity<PagamentoDTO> create(@RequestBody @Valid PagamentoDTO dto){
+    public ResponseEntity<PagamentoDTO> create( @Valid @RequestBody PagamentoDTO dto){
         dto = service.createPagamento(dto);
 
         URI uri = ServletUriComponentsBuilder
@@ -40,20 +39,20 @@ public class PagamentoController {
                 .path("/{id}")
                 .buildAndExpand(dto.getId())
                 .toUri();
+
         return ResponseEntity.created(uri).body(dto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PagamentoDTO> update(@PathVariable Long id,
                                                @Valid @RequestBody PagamentoDTO dto){
-        dto = service.updateProduto(id, dto);
+        dto = service.updatePagamento(id, dto);
         return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void>delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete (@PathVariable Long id){
         service.deletePagamento(id);
         return ResponseEntity.noContent().build();
     }
-
 }
