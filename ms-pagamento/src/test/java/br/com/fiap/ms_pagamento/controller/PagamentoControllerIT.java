@@ -51,4 +51,16 @@ public class PagamentoControllerIT {
                 .andExpect(jsonPath("[0].nome").value("Amadeus Mozart"))
                 .andExpect(jsonPath("[5].status").value("CONFIRMADO"));
     }
+    @Test
+    public void getByIdShouldReturnPagamentoDTOWhuenIdExists() throws Exception{
+        mockMvc.perform(get("/pagamentos/{id}", existingId)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("id").value(1))
+                .andExpect(jsonPath("nome").isString())
+                .andExpect(jsonPath("nome").value("Amadeus Mozart"))
+                .andExpect(jsonPath("status").value("CRIADO"));
+    }
 }
