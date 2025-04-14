@@ -111,6 +111,6 @@ public class PagamentoControllerIT {
                 .andExpect(jsonPath("$.valor").value(pagamentoDTO.getValor()))
                 .andExpect(jsonPath("$.status").value("CRIADO"))
                 .andExpect(jsonPath("$.nome").isEmpty()) //Não obrigatório
-                .andExpect(jsonPath("$.valodade").isEmpty()); //Não obrigatório
+                .andExpect(jsonPath("$.validade").isEmpty()); //Não obrigatório
     }
 }
