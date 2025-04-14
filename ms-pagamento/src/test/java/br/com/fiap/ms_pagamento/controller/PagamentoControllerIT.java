@@ -5,6 +5,7 @@ import br.com.fiap.ms_pagamento.dto.PagamentoDTO;
 import br.com.fiap.ms_pagamento.tests.Factory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -36,7 +37,7 @@ public class PagamentoControllerIT {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() throws Exception{
+    void setUp() throws Exception {
         existingId = 1L;
         nonExistingId = 50L;
         pagamentoDTO = Factory.createPagamentoDTO();
@@ -46,7 +47,7 @@ public class PagamentoControllerIT {
     public void getAllShouldReturnListAllPagamentos() throws Exception {
         //Teste de integração
         mockMvc.perform(get("/pagamentos")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -55,10 +56,11 @@ public class PagamentoControllerIT {
                 .andExpect(jsonPath("[0].nome").value("Amadeus Mozart"))
                 .andExpect(jsonPath("[5].status").value("CONFIRMADO"));
     }
+
     @Test
-    public void getByIdShouldReturnPagamentoDTOWhuenIdExists() throws Exception{
+    public void getByIdShouldReturnPagamentoDTOWhuenIdExists() throws Exception {
         mockMvc.perform(get("/pagamentos/{id}", existingId)
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -69,23 +71,23 @@ public class PagamentoControllerIT {
     }
 
     @Test
-    public void getByIdShouldReturnNotFoundExceptionWhenIdDoesNotExist() throws Exception{
-        mockMvc.perform(get("/pagamentos/{id}",nonExistingId)
-                .accept(MediaType.APPLICATION_JSON))
+    public void getByIdShouldReturnNotFoundExceptionWhenIdDoesNotExist() throws Exception {
+        mockMvc.perform(get("/pagamentos/{id}", nonExistingId)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void createShouldReturnPagamantoDTO() throws Exception{
+    public void createShouldReturnPagamantoDTO() throws Exception {
         pagamentoDTO = Factory.createPagamentoDTO();
         String jsonBody = objectMapper.writeValueAsString(pagamentoDTO);
 
         mockMvc.perform(post("/pagamentos")
-                .content(jsonBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
@@ -96,13 +98,13 @@ public class PagamentoControllerIT {
     }
 
     @Test
-    public void createShouldPersistPagamentoWithRequiredFilds() throws Exception{
+    public void createShouldPersistPagamentoWithRequiredFilds() throws Exception {
         pagamentoDTO = Factory.createNewPagamentoDTOWithRequiredFilds();
         String jsonBody = objectMapper.writeValueAsString(pagamentoDTO);
         mockMvc.perform(post("/pagamentos")
-                    .content(jsonBody)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(print())
                 .andExpect(header().exists("Location"))
@@ -112,5 +114,20 @@ public class PagamentoControllerIT {
                 .andExpect(jsonPath("$.status").value("CRIADO"))
                 .andExpect(jsonPath("$.nome").isEmpty()) //Não obrigatório
                 .andExpect(jsonPath("$.validade").isEmpty()); //Não obrigatório
+    }
+
+    @Test
+    @DisplayName("Create deve lançar exveption quando dados inváçidos e retornar status 422")
+    public void createShouldThrowsExceptionWhenInvalidData() throws Exception {
+        pagamentoDTO = Factory.createNewPagamentoDTOWithInvalidData();
+        String bodyJson = objectMapper.writeValueAsString(pagamentoDTO);
+        mockMvc.perform(post("/pagamentos")
+                        .content(bodyJson)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                // ou
+                .andExpect(status().isUnprocessableEntity());
     }
 }
