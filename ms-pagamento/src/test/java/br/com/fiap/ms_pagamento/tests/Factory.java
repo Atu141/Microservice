@@ -26,4 +26,14 @@ public class Factory {
         pagamento.setId(null);
         return new PagamentoDTO(pagamento);
     }
+
+    public static PagamentoDTO createNewPagamentoDTOWithRequiredFilds(){
+        Pagamento pagamento = createPagamento();
+        pagamento.setId(null);
+        pagamento.setNome(null);
+        pagamento.setNumeroDoCartao(null);
+        pagamento.setValidade(null);
+        pagamento.setCodigoDeSeguranca(null);
+        return new PagamentoDTO(pagamento);
+    }
 }
