@@ -94,4 +94,23 @@ public class PagamentoControllerIT {
                 .andExpect(jsonPath("$.nome").value(pagamentoDTO.getNome()))
                 .andExpect(jsonPath("$.status").value("CRIADO"));
     }
+
+    @Test
+    public void createShouldPersistPagamentoWithRequiredFilds() throws Exception{
+        pagamentoDTO = Factory.createNewPagamentoDTOWithRequiredFilds();
+        String jsonBody = objectMapper.writeValueAsString(pagamentoDTO);
+        mockMvc.perform(post("/pagamentos")
+                    .content(jsonBody)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andExpect(header().exists("Location"))
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.valor").exists()) //Obrigatório
+                .andExpect(jsonPath("$.valor").value(pagamentoDTO.getValor()))
+                .andExpect(jsonPath("$.status").value("CRIADO"))
+                .andExpect(jsonPath("$.nome").isEmpty()) //Não obrigatório
+                .andExpect(jsonPath("$.valodade").isEmpty()); //Não obrigatório
+    }
 }
