@@ -172,4 +172,20 @@ public class PagamentoControllerIT {
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
+
+    @Test
+    public void deleteShouldReturnNoContentWhenIdExists() throws Exception{
+        mockMvc.perform(delete("/pagamentos/{id}", existingId)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+    }
+
+    @Test
+    public void deleteShouldReturnNotFoundWhenIdDoesNotExist() throws Exception{
+        mockMvc.perform(delete("/pagamentos/{id}", nonExistingId)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
 }
