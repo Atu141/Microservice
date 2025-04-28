@@ -1,6 +1,7 @@
 package com.github.Atu141.ms_pedido.dto;
 
 import com.github.Atu141.ms_pedido.entities.ItemDoPedido;
+import com.github.Atu141.ms_pedido.entities.Pedido;
 import com.github.Atu141.ms_pedido.entities.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,4 +31,20 @@ public class PedidoDTO {
     @Enumerated(EnumType.STRING)
     private Status status;
     private List<@Valid ItemDoPedidoDTO> itens = new ArrayList<>();
+
+    public PedidoDTO(Pedido entity){
+        id = entity.getId();
+        cpf = entity.getCpf();
+        nome = entity.getNome();
+        data = entity.getData();
+        status = entity.getStatus();
+
+        //Para preencher os itens
+        for(ItemDoPedido item : entity.getItens()){
+            ItemDoPedidoDTO itemDTO = new ItemDoPedidoDTO(item);
+            itens.add(itemDTO);
+        }
+    }
+
+
 }
