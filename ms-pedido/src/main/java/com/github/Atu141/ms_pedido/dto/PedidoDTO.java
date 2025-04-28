@@ -21,7 +21,7 @@ import java.util.List;
 public class PedidoDTO {
     private Long id;
     @NotEmpty(message = "CPF requerido")
-    @Size(min = 11, max = 14, message = "O CPF deve ter entre 11 e 14 caracteres")
+    @Size(min = 11, max = 14, message = "O CPF deve ter 11 caracteres")
     private String cpf;
     @NotEmpty(message = "Nome requerido")
     @Size(min = 3, max = 100, message = "O nome deve ter entre 3 a 100 caracteres")
@@ -29,5 +29,5 @@ public class PedidoDTO {
     private LocalDate data;
     @Enumerated(EnumType.STRING)
     private Status status;
-    private List<@Valid ItemDoPedido> itens = new ArrayList<>();
+    private List<@Valid ItemDoPedidoDTO> itens = new ArrayList<>();
 }
