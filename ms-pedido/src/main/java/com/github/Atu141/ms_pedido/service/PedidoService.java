@@ -85,4 +85,12 @@ public class PedidoService {
             throw new ResourceNotFoundException("Recuso não encontrado. ID: " + id);
         }
     }
+
+    public void deletePedido(Long id){
+        if (!repository.existsById(id)){
+            throw new ResourceNotFoundException("Recurso não encontrado. ID: " + id);
+        }
+
+        repository.deleteById(id);
+    }
 }
