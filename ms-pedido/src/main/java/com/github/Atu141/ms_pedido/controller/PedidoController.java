@@ -5,6 +5,7 @@ import com.github.Atu141.ms_pedido.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,5 +21,11 @@ public class PedidoController {
     public ResponseEntity<List<PedidoDTO>> findAllPedidos(){
         List<PedidoDTO> list = service.getAllPedidos();
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PedidoDTO> findById(@PathVariable Long id){
+        PedidoDTO dto = service.getById(id);
+        return ResponseEntity.ok(dto);
     }
 }
