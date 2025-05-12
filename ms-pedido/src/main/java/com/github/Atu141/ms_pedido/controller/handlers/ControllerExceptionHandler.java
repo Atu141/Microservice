@@ -3,7 +3,7 @@ package com.github.Atu141.ms_pedido.controller.handlers;
 
 import com.github.Atu141.ms_pedido.controller.handlers.dto.CustomErrorDTO;
 import com.github.Atu141.ms_pedido.controller.handlers.dto.ValidationErrorDTO;
-import com.github.Atu141.ms_pedido.service.exceptions.ResourceNotFoundException;
+import com.github.Atu141.ms_pedido.service.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

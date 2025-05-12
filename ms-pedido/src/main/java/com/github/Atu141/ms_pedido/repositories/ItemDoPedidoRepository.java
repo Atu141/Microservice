@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface ItemDoPedidoRepository extends JpaRepository<ItemDoPedido, Long> {
+
     @Modifying
     @Transactional
-    @Query("DELETE FROM ItemdoPedido i WHERE i,pedido.id = :pedidoId")
+    @Query("DELETE FROM ItemDoPedido i WHERE i.pedido.id = :pedidoId")
     void deleteByPedidoId(Long pedidoId);
 }

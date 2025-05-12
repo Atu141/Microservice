@@ -14,43 +14,51 @@ import java.util.List;
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {
+
     @Autowired
     private PedidoService service;
 
     @GetMapping
-    public ResponseEntity<List<PedidoDTO>> findAllPedidos(){
-        List<PedidoDTO> list = service.getAllPedidos();
+    public ResponseEntity<List<PedidoDTO>> getAllPedidos() {
+
+        List<PedidoDTO> list = service.findAllPedidos();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoDTO> findById(@PathVariable Long id){
-        PedidoDTO dto = service.getById(id);
+    public ResponseEntity<PedidoDTO> getById(@PathVariable Long id) {
+
+        PedidoDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public ResponseEntity<PedidoDTO> createPedido(@Valid @RequestBody PedidoDTO dto){
+    public ResponseEntity<PedidoDTO> createPedido(@RequestBody @Valid PedidoDTO dto) {
+
         dto = service.savePedido(dto);
+
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
                 .path("/{id}")
                 .buildAndExpand(dto.getId())
                 .toUri();
-
         return ResponseEntity.created(uri).body(dto);
     }
 
-    @PutMapping("{/id}")
+    @PutMapping("/{id}")
     public ResponseEntity<PedidoDTO> updatePedido(@PathVariable Long id,
-                                                  @Valid @RequestBody PedidoDTO dto){
+                                                  @Valid @RequestBody PedidoDTO dto) {
+
         dto = service.updatePedido(id, dto);
         return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePedidoById(@PathVariable Long id){
+
         service.deletePedido(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }
