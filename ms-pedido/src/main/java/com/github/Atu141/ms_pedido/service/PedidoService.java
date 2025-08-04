@@ -52,6 +52,7 @@ public class PedidoService {
         entity.setData(LocalDate.now());
         entity.setStatus(Status.REALIZADO);
         copyDtoToEntity(dto, entity);
+        entity.calcularTotalDoPedido();
         entity = repository.save(entity);
         itemDoPedidoRepository.saveAll(entity.getItens());
         return new PedidoDTO(entity);
@@ -59,14 +60,14 @@ public class PedidoService {
 
     @Transactional
     public PedidoDTO updatePedido(Long id, PedidoDTO dto) {
-
         try {
-            itemDoPedidoRepository.deleteByPedidoId(id);
             Pedido entity = repository.getReferenceById(id);
             entity.setData(LocalDate.now());
             entity.setStatus(Status.REALIZADO);
-
+            //Exclui os itens antigos
+            itemDoPedidoRepository.deleteByPedidoId(id);
             copyDtoToEntity(dto, entity);
+            entity.calcularTotalDoPedido();
             entity = repository.save(entity);
             itemDoPedidoRepository.saveAll(entity.getItens());
             return new PedidoDTO(entity);

@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +25,19 @@ import java.util.List;
 public class PedidoDTO {
 
     private Long id;
-
     @NotEmpty(message = "Nome requerido")
     @Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 cacracteres")
     private String nome;
-
     //    @CPF(message = "CPF requerido")
     @NotBlank(message = "CPF requerido")
     @Size(min = 11, max = 11, message = "CPF deve ter 11 caracteres")
     private String cpf;
-
     private LocalDate data;
-
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private StatusDTO status;
+
+    //Valor Calculado
+    private BigDecimal valorTotal;
 
     @NotEmpty(message = "Pedido deve ter pelo menos um item de pedido")
     private List<@Valid ItemDoPedidoDTO> itens = new ArrayList<>();
@@ -47,7 +47,8 @@ public class PedidoDTO {
         nome = entity.getNome();
         cpf = entity.getCpf();
         data = entity.getData();
-        status = entity.getStatus();
+        status = new StatusDTO(entity.getStatus());
+        valorTotal = entity.getValorTotal();
 
         // para preencher os itens do pedido
         for (ItemDoPedido item : entity.getItens()) {
