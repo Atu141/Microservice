@@ -1,8 +1,10 @@
 package com.github.Atu141.ms_pedido.controller;
 
 import com.github.Atu141.ms_pedido.dto.PedidoDTO;
+import com.github.Atu141.ms_pedido.dto.StatusDTO;
 import com.github.Atu141.ms_pedido.service.PedidoService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -67,4 +69,18 @@ public class PedidoController {
     }
 
 
+    @PutMapping("/{id}/pago")
+    public ResponseEntity<String> aprovarPagamentoDoPedido(@PathVariable
+                                                           @NotNull Long id){
+        service.aprovarPagamentoDoPedido(id);
+        String msg = "Pedido pago, aguardar confirmação de pagamento";
+        return ResponseEntity.ok().body(msg);
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<PedidoDTO> updatePedidoStatus(@PathVariable Long id,
+                                                        @RequestBody StatusDTO statusDTO){
+        PedidoDTO dto = service.updatePedidoStatus(id,statusDTO);
+        return ResponseEntity.ok(dto);
+    }
 }
