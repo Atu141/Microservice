@@ -1,0 +1,385 @@
+{
+	"info": {
+		"_postman_id": "ba94f4a2-4d2e-4e55-85b8-bf234d177411",
+		"name": "FIAP-2025-Microservices p:8082",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9099725"
+	},
+	"item": [
+		{
+			"name": "MS-Pagamento",
+			"item": [
+				{
+					"name": "pagamentos 8082",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ms-pagamento/pagamentos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pagamento",
+								"pagamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pagamento by id 8082",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ms-pagamento/pagamentos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pagamento",
+								"pagamentos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pagamento by id 8082 confirmar",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ms-pagamento/pagamentos/1/confirmar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pagamento",
+								"pagamentos",
+								"1",
+								"confirmar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pagamento create 8082",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"valor\": 125.32,\r\n    \"nome\": \"Jon Snow\",\r\n    \"numeroDoCartao\": \"5894362478961235\",\r\n    \"validade\": \"05/29\",\r\n    \"codigoDeSeguranca\": \"389\",\r\n    \"pedidoId\": 1,\r\n    \"formaDePagamentoId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/ms-pagamento/pagamentos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pagamento",
+								"pagamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pagamento update 8082",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"valor\": 35.55,\r\n    \"nome\": \"Amadeus Mozart\",\r\n    \"numeroDoCartao\": \"6895426578961254\",\r\n    \"validade\": \"12/30\",\r\n    \"codigoDeSeguranca\": \"589\",\r\n    \"status\": \"CONFIRMADO\",\r\n    \"pedidoId\": 5,\r\n    \"formaDePagamentoId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/ms-pagamento/pagamentos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pagamento",
+								"pagamentos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pagamento delete 8082",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ms-pagamento/pagamentos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pagamento",
+								"pagamentos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MS-Pedido",
+			"item": [
+				{
+					"name": "pedidos 8082",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ms-pedido/pedidos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pedido",
+								"pedidos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedidos/port",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ms-pedido/pedidos/port",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pedido",
+								"pedidos",
+								"port"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido id 8082",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ms-pedido/pedidos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pedido",
+								"pedidos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido create 8082",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cpf\": \"575.654.987-52\",\r\n    \"nome\": \"Sansa Stark\",\r\n    \"items\": [ \r\n        {           \r\n            \"quantidade\": 1,\r\n            \"descricao\": \"Headset com fio USB Logitech H390\",\r\n            \"valorUnitario\": 210.00\r\n        },\r\n        {          \r\n            \"quantidade\": 1,\r\n            \"descricao\": \"Microfone Gamer QuadCast 2, HyperX\",\r\n            \"valorUnitario\": 1034.10\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/ms-pedido/pedidos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pedido",
+								"pedidos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido 8082 msg kafka",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ms-pedido/pedidos/enviar?mensagem=teste",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pedido",
+								"pedidos",
+								"enviar"
+							],
+							"query": [
+								{
+									"key": "mensagem",
+									"value": "teste"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido update 8082",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cpf\": \"575.654.987-52\",\r\n    \"nome\": \"Sansa Bolton Stark\",\r\n    \"items\": [ \r\n        {           \r\n            \"quantidade\": 1,\r\n            \"descricao\": \"Headset com fio USB Logitech H390\",\r\n            \"valorUnitario\": 210.00\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/ms-pedido/pedidos/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pedido",
+								"pedidos",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido id 8082pago",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ms-pedido/pedidos/1/pago",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pedido",
+								"pedidos",
+								"1",
+								"pago"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido id 8082status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\" : \"REALIZADO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/ms-pedido/pedidos/1/status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pedido",
+								"pedidos",
+								"1",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido delete 8082",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/ms-pedido/pedidos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"ms-pedido",
+								"pedidos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
