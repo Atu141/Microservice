@@ -2,6 +2,7 @@ package br.com.fiap.ms_pagamento.controller;
 
 import br.com.fiap.ms_pagamento.dto.PagamentoDTO;
 import br.com.fiap.ms_pagamento.service.PagamentoService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,12 @@ public class PagamentoController {
     }
 
     @PutMapping("/{id}/confirmar")
+    @CircuitBreaker(name = "atualizarPedido", fallbackMethod = "confirmacaoPagemntoPendente")
     public void confirmarPagamentoDePedido(@PathVariable
                                            @NotNull Long id){
         service.confirmarPagamentoDoPedido(id);
+    }
+    public void confirmacaoPagemntoPendente(Long id, Exception e){
+        service.alterarStatusDoPagamento(id);
     }
 }
