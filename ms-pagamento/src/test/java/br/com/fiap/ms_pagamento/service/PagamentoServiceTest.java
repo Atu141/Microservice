@@ -23,49 +23,54 @@ import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(SpringExtension.class)
 public class PagamentoServiceTest {
 
+    // Mock - Injetando
     @InjectMocks
     private PagamentoService service;
 
+    // Mock do repositório
     @Mock
     private PagamentoRepository repository;
 
+    //preparando os dados
     private Long existingId;
     private Long nonExistingId;
 
+    // próximos testes
     private Pagamento pagamento;
-    private PagamentoDTO dto;
+    private PagamentoDTO pagamentoDTO;
 
     @BeforeEach
     void setup() throws Exception {
         existingId = 1L;
         nonExistingId = 10L;
-
-        // simulando o comportamento do objeto mokado
-        // delete - quando ID existe
+        //precisa simular o comportamento do objeto mockado
+        //delete - quando id existe
         Mockito.when(repository.existsById(existingId)).thenReturn(true);
-        // delete - quando ID não existe
+        //delete - quando id não existe
         Mockito.when(repository.existsById(nonExistingId)).thenReturn(false);
-        // não faça nada quando .... (void)
+        //Mockito.when(repository.existsById(Mockito.argThat(id -> !id.equals(existingId)))).thenReturn(false);
+        //delete - primeiro caso - deleta
+        // não faça nada (void) quando ...
         Mockito.doNothing().when(repository).deleteById(existingId);
-        // proximos testes
+        // próximos testes
         pagamento = Factory.createPagamento();
-        dto = new PagamentoDTO(pagamento);
-        //getById
-        Mockito.when(repository.findById(any())).thenReturn(Optional.of(pagamento));
+        pagamentoDTO = new PagamentoDTO(pagamento);
+        // simulação dos comportamentos
+        // getById (findById)
+        Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(pagamento));
         Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
-        // createPagamento
+        // createPagamento (insert)
         Mockito.when(repository.save(any())).thenReturn(pagamento);
-        // updatePagamento
+        // updatePagamento (update) - primeito caso - id existe
         Mockito.when(repository.getReferenceById(existingId)).thenReturn(pagamento);
+        // updatePagamento (update) - segundo caso - id não existe
         Mockito.when(repository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
-
     }
 
-
     @Test
-    @DisplayName("delete Deveria não fazer nada quando ID existe")
-    public void deleteShouldDoNothingWhenIsExists() {
-
+    @DisplayName("delete Deveria não fazer nada quando Id existe")
+    public void deleteShouldDoNothingWhenIdExists() {
+        // em PagamentoService, o metodo delete é do tipo void
         Assertions.assertDoesNotThrow(
                 () -> {
                     service.deletePagamento(existingId);
@@ -74,20 +79,23 @@ public class PagamentoServiceTest {
     }
 
     @Test
-    @DisplayName("delete Deveria lança exceção ResourceNotFoundException quando ID não existe")
-    public void deleteShouldThrowResourceNotFondExceptionIsDoesNotExist() {
+    @DisplayName("delete Deveria lançar exceção ResourceNotFoundException quando Id não existe")
+    public void deleteShouldThrowResourceNotFoundExceptionWhenIdDoesNotExists() {
 
         Assertions.assertThrows(ResourceNotFoundException.class,
                 () -> {
                     service.deletePagamento(nonExistingId);
                 }
         );
-
     }
 
+    // respostas do desafio
     @Test
-    public void getByIdShouldReturnPagamentoDTOWhenIdExists() {
-        dto = service.getById(existingId);
+    public void getByIdShouldReturnPagamentoDTOWhenIdExists(){
+
+        // nome da variável para ficar igual ao controller,
+        // não é obrigatório
+        PagamentoDTO dto = service.getById(existingId);
 
         Assertions.assertNotNull(dto);
         Assertions.assertEquals(dto.getId(), existingId);
@@ -95,7 +103,7 @@ public class PagamentoServiceTest {
     }
 
     @Test
-    public void getByIdShouldRertunResurceNotFiundExecptionWhenIdDoesNotExist() {
+    public void getByIdShouldReturnResourceNotFoundExceptionWhenIdDoesNotExist(){
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
             service.getById(nonExistingId);
         });
@@ -103,7 +111,8 @@ public class PagamentoServiceTest {
 
     @Test
     public void createPagamentoShouldReturnPagamentoDTOWhenPagamentoIsCreated(){
-        dto = service.createPagamento(dto);
+
+        PagamentoDTO dto = service.createPagamento(pagamentoDTO);
 
         Assertions.assertNotNull(dto);
         Assertions.assertEquals(dto.getId(), pagamento.getId());
@@ -111,7 +120,8 @@ public class PagamentoServiceTest {
 
     @Test
     public void updatePagamentoShouldReturnPagamentoDTOWhenIdExists(){
-        dto = service.updatePagamento(pagamento.getId(), dto);
+
+        PagamentoDTO dto = service.updatePagamento(pagamento.getId(), pagamentoDTO);
 
         Assertions.assertNotNull(dto);
         Assertions.assertEquals(dto.getId(), existingId);
@@ -119,14 +129,20 @@ public class PagamentoServiceTest {
     }
 
     @Test
-    public void updatePagamentoShouldReturnResourceNotFoundExeceptionWhenIdDoesNotExist(){
+    public void updatePagamentoShouldReturnResourceNotFoundExceptionWhenIdDoesNotExist(){
 
-        Assertions.assertThrows(ResourceNotFoundException.class, ()-> {
-            service.updatePagamento(nonExistingId, dto);
-                });
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            service.updatePagamento(nonExistingId, pagamentoDTO);
+        });
     }
 
 }
+
+
+
+
+
+
 
 
 

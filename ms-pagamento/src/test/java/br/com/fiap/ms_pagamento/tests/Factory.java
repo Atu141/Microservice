@@ -6,14 +6,14 @@ import br.com.fiap.ms_pagamento.entity.Status;
 
 import java.math.BigDecimal;
 
+// Classe para instanciar objetos
 public class Factory {
 
-    public static Pagamento createPagamento(){
+    public static Pagamento createPagamento() {
         Pagamento pagamento = new Pagamento(1L, BigDecimal.valueOf(32.25),
-                "Jon Snow", "2345789632145789",
-                "07/32", "585", Status.CRIADO, 1L, 2L);
-
-        return  pagamento;
+                "Jon Snow", "2365412478964521", "07/32", "585",
+                Status.CRIADO, 1L, 2L);
+        return pagamento;
     }
 
     public static PagamentoDTO createPagamentoDTO(){
@@ -27,7 +27,7 @@ public class Factory {
         return new PagamentoDTO(pagamento);
     }
 
-    public static PagamentoDTO createNewPagamentoDTOWithRequiredFilds(){
+    public static PagamentoDTO createNewPagamentoDTOWithRequiredFields(){
         Pagamento pagamento = createPagamento();
         pagamento.setId(null);
         pagamento.setNome(null);
@@ -46,3 +46,11 @@ public class Factory {
         return new PagamentoDTO(pagamento);
     }
 }
+
+
+
+
+
+
+
+

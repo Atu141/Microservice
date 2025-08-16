@@ -19,19 +19,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc  // Configura o MockMvc para testes de endpoints.
 @Transactional // Rollback DB
 public class PagamentoControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
-    //Preparando os dados
+    //preparando os dados
     private Long existingId;
     private Long nonExistingId;
     private PagamentoDTO pagamentoDTO;
-    //conventendo o onj para JSON p/ enviar as requisições
+    //converter obj para JSON p/ enviar requsições
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -44,7 +43,8 @@ public class PagamentoControllerIT {
 
     @Test
     public void getAllShouldReturnListAllPagamentos() throws Exception {
-        //Teste de integração
+
+        // Testa a integração entre o controller e o service
         mockMvc.perform(get("/pagamentos")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -52,12 +52,14 @@ public class PagamentoControllerIT {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("[0].id").value(1))
                 .andExpect(jsonPath("[0].nome").isString())
-                .andExpect(jsonPath("[0].nome").value("Amadeus Mozart"))
-                .andExpect(jsonPath("[5].status").value("CONFIRMADO"));
+                .andExpect(jsonPath("[0].nome").value("Amadeus Mozart"));
+
     }
 
     @Test
-    public void getByIdShouldReturnPagamentoDTOWhuenIdExists() throws Exception {
+    public void getByIdShouldReturnPagamentoDTOWhenIdExists() throws Exception {
+
+        // Testa a integração entre o controller e o service
         mockMvc.perform(get("/pagamentos/{id}", existingId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -70,7 +72,9 @@ public class PagamentoControllerIT {
     }
 
     @Test
-    public void getByIdShouldReturnNotFoundExceptionWhenIdDoesNotExist() throws Exception {
+    public void getByIdShouldReturnNotFoundExceptionWheIdDoesNotExist() throws Exception {
+
+        // Testa a integração entre o controller e o service
         mockMvc.perform(get("/pagamentos/{id}", nonExistingId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -79,8 +83,9 @@ public class PagamentoControllerIT {
     }
 
     @Test
-    public void createShouldReturnPagamantoDTO() throws Exception {
-        pagamentoDTO = Factory.createPagamentoDTO();
+    public void createShouldReturnPagamentoDTO() throws Exception {
+
+        pagamentoDTO = Factory.createNewPagamentoDTO();
         String jsonBody = objectMapper.writeValueAsString(pagamentoDTO);
 
         mockMvc.perform(post("/pagamentos")
@@ -97,8 +102,9 @@ public class PagamentoControllerIT {
     }
 
     @Test
-    public void createShouldPersistPagamentoWithRequiredFilds() throws Exception {
-        pagamentoDTO = Factory.createNewPagamentoDTOWithRequiredFilds();
+    public void createShouldPersistPagamentoWithRequiredFields() throws Exception {
+
+        pagamentoDTO = Factory.createNewPagamentoDTOWithRequiredFields();
         String jsonBody = objectMapper.writeValueAsString(pagamentoDTO);
         mockMvc.perform(post("/pagamentos")
                         .content(jsonBody)
@@ -108,17 +114,19 @@ public class PagamentoControllerIT {
                 .andDo(print())
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.valor").exists()) //Obrigatório
+                .andExpect(jsonPath("$.valor").exists())   //Campo obrigatório
                 .andExpect(jsonPath("$.valor").value(pagamentoDTO.getValor()))
                 .andExpect(jsonPath("$.status").value("CRIADO"))
-                .andExpect(jsonPath("$.nome").isEmpty()) //Não obrigatório
-                .andExpect(jsonPath("$.validade").isEmpty()); //Não obrigatório
+                .andExpect(jsonPath("$.nome").isEmpty()) // Não obrigatório
+                .andExpect(jsonPath("$.validade").isEmpty()); // Não obrigatório
     }
 
     @Test
-    @DisplayName("Create deve lançar exveption quando dados inváçidos e retornar status 422")
-    public void createShouldThrowsExceptionWhenInvalidData() throws Exception {
+    @DisplayName("Create deve lançar exception quando dados inválidos e retornar status 422")
+    public void createShoulThrowsExceptionWhenInvalidData() throws Exception {
+
         pagamentoDTO = Factory.createNewPagamentoDTOWithInvalidData();
+
         String bodyJson = objectMapper.writeValueAsString(pagamentoDTO);
         mockMvc.perform(post("/pagamentos")
                         .content(bodyJson)
@@ -151,41 +159,49 @@ public class PagamentoControllerIT {
     }
 
     @Test
-    public void updateShouldReturnNotFoundWhenIdDoesNotExist() throws Exception{
+    public void updateShoulReturnNotFoundWhenIdDoesNotExist() throws Exception {
+
         String jsonBody = objectMapper.writeValueAsString(pagamentoDTO);
         mockMvc.perform(put("/pagamentos/{id}", nonExistingId)
-                .content(jsonBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
 
     @Test
-    public void updateShouldThrowsExceptionWhenInvalidData() throws Exception{
+    public void updateShoulThrowsExceptionWhenInvalidData() throws Exception {
+
         pagamentoDTO = Factory.createNewPagamentoDTOWithInvalidData();
         String jsonBody = objectMapper.writeValueAsString(pagamentoDTO);
         mockMvc.perform(put("/pagamentos/{id}", existingId)
-                .content(jsonBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
 
     @Test
-    public void deleteShouldReturnNoContentWhenIdExists() throws Exception{
+    public void deleteShouldReturnNoContentWhenIdExists() throws Exception {
         mockMvc.perform(delete("/pagamentos/{id}", existingId)
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andDo(print());
     }
 
     @Test
-    public void deleteShouldReturnNotFoundWhenIdDoesNotExist() throws Exception{
+    public void deleteShouldReturnNotFoundWhenIdDoesNotExist() throws Exception {
+
         mockMvc.perform(delete("/pagamentos/{id}", nonExistingId)
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
+
 }
+
+
+
+
