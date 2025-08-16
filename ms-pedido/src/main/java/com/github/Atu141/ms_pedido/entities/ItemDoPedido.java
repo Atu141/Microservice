@@ -24,6 +24,7 @@ public class ItemDoPedido {
     @Column(nullable = false)
     private BigDecimal valorUnitario;
 
+    // Relacionamento
     @ManyToOne(optional = false)
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;

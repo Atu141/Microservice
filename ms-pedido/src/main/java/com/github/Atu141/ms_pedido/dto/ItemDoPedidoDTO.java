@@ -2,6 +2,7 @@ package com.github.Atu141.ms_pedido.dto;
 
 import com.github.Atu141.ms_pedido.entities.ItemDoPedido;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -17,15 +18,13 @@ public class ItemDoPedidoDTO {
 
     private Long id;
 
-    @NotNull(message = "Quantidade requerida")
-    @Positive(message = "A quantidade deve ser um valor positivo")
+    @NotNull(message = "Quantidade requerido")
+    @Positive(message = "Quantidade deve ser um número positivo")
     private Integer quantidade;
-
-    @NotBlank(message = "Descricação é requerida")
+    @NotEmpty(message = "Descrição requerido")
     private String descricao;
-
-    @NotNull(message = "Valor unitário é requerido")
-    @Positive(message = "O valor unitário deve ser um número positivo")
+    @NotNull(message = "Valor unitário requerido")
+    @Positive(message = "Valor unitário deve ser um número positivo")
     private BigDecimal valorUnitario;
 
     public ItemDoPedidoDTO(ItemDoPedido entity) {

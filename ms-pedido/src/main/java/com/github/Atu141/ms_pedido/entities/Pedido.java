@@ -20,25 +20,25 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    // @Column - define características da coluna no DB
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
-    //    @Column(unique = true)
-    @Column(nullable = false, length = 11)
+    //@Column(unique = true, nullable = false, length = 11)
+    @Column(nullable = false)
     private String cpf;
     private LocalDate data;
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    //Valor Calculado
+    // Valor calculado
     private BigDecimal valorTotal;
 
-    //relacionamento
+    // Relacionamento
     @OneToMany(mappedBy = "pedido",
             cascade = CascadeType.ALL)
     private List<ItemDoPedido> itens = new ArrayList<>();
 
-    public void calcularTotalDoPedido(){
+    public void calcularTotalDoPedido() {
         this.valorTotal = this.itens.stream()
                 .map(i -> i.getValorUnitario()
                         .multiply(BigDecimal.valueOf(i.getQuantidade())))

@@ -21,27 +21,31 @@ public class PedidoController {
     @Autowired
     private PedidoService service;
 
-    @GetMapping("/port")
-    public String getPort(@Value("${local.server.port}")String porta){
-        return String.format("Request da instancia recebida na port %s", porta);
-    }
-
     @GetMapping
-    public ResponseEntity<List<PedidoDTO>> getAllPedidos() {
+    public ResponseEntity<List<PedidoDTO>> findAllPedidos() {
 
-        List<PedidoDTO> list = service.findAllPedidos();
+        List<PedidoDTO> list = service.getAllPedidos();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<PedidoDTO> findById(@PathVariable Long id) {
 
-        PedidoDTO dto = service.findById(id);
+        PedidoDTO dto = service.getById(id);
         return ResponseEntity.ok(dto);
     }
 
+    // testando load balancing - balanceamento de carga
+    // devolve a porta da instância que está rodando
+    @GetMapping("/port")
+    public String getPort(@Value("${local.server.port}") String porta) {
+
+        return String.format("Request da Instância recebida na porta %s", porta);
+
+    }
+
     @PostMapping
-    public ResponseEntity<PedidoDTO> createPedido(@RequestBody @Valid PedidoDTO dto) {
+    public ResponseEntity<PedidoDTO> createPedido(@Valid @RequestBody PedidoDTO dto) {
 
         dto = service.savePedido(dto);
 
@@ -50,6 +54,7 @@ public class PedidoController {
                 .path("/{id}")
                 .buildAndExpand(dto.getId())
                 .toUri();
+
         return ResponseEntity.created(uri).body(dto);
     }
 
@@ -61,26 +66,26 @@ public class PedidoController {
         return ResponseEntity.ok(dto);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePedidoById(@PathVariable Long id){
-
-        service.deletePedido(id);
-        return ResponseEntity.noContent().build();
-    }
-
-
     @PutMapping("/{id}/pago")
-    public ResponseEntity<String> aprovarPagamentoDoPedido(@PathVariable
-                                                           @NotNull Long id){
+    public ResponseEntity<String> aprovarPagamentoDoPedido(@PathVariable @NotNull Long id){
+
         service.aprovarPagamentoDoPedido(id);
         String msg = "Pedido pago, aguardar confirmação de pagamento";
         return ResponseEntity.ok().body(msg);
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<PedidoDTO> updatePedidoStatus(@PathVariable Long id,
-                                                        @RequestBody StatusDTO statusDTO){
-        PedidoDTO dto = service.updatePedidoStatus(id,statusDTO);
+    public ResponseEntity<PedidoDTO> updatePedidoStatu(@PathVariable Long id,
+                                                       @RequestBody StatusDTO statusDTO){
+        PedidoDTO dto = service.updatePedidoStatus(id, statusDTO);
         return ResponseEntity.ok(dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePedidoById(@PathVariable Long id) {
+
+        service.deletePedido(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

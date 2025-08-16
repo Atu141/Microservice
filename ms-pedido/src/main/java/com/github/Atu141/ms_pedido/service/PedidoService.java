@@ -28,19 +28,17 @@ public class PedidoService {
     private ItemDoPedidoRepository itemDoPedidoRepository;
 
     @Transactional(readOnly = true)
-    public List<PedidoDTO> findAllPedidos() {
+    public List<PedidoDTO> getAllPedidos() {
 
         return repository.findAll()
-                .stream()
-                .map(PedidoDTO::new)
-                .toList();
+                .stream().map(PedidoDTO::new).toList();
     }
 
     @Transactional(readOnly = true)
-    public PedidoDTO findById(Long id) {
+    public PedidoDTO getById(Long id) {
 
         Pedido entity = repository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Recurso não encontrado. Id: " + id)
+                () -> new ResourceNotFoundException("Recurso não encontrado. ID: " + id)
         );
 
         return new PedidoDTO(entity);
@@ -65,54 +63,59 @@ public class PedidoService {
             Pedido entity = repository.getReferenceById(id);
             entity.setData(LocalDate.now());
             entity.setStatus(Status.REALIZADO);
-            //Exclui os itens antigos
+            // Exclui os itens antigos
             itemDoPedidoRepository.deleteByPedidoId(id);
             copyDtoToEntity(dto, entity);
             entity.calcularTotalDoPedido();
             entity = repository.save(entity);
+            // Atualiza os itens com os novos dados
             itemDoPedidoRepository.saveAll(entity.getItens());
             return new PedidoDTO(entity);
         } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("Recurso não encontrado. Id: " + id);
+            throw new ResourceNotFoundException("Recurso não encontrado. ID: " + id);
         }
     }
 
-    @Transactional
-    public void deletePedido(Long id){
-        if(! repository.existsById(id)){
-            throw new ResourceNotFoundException("Recurso não encontrado. Id: " + id);
+    public void deletePedido(Long id) {
+
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Recurso não encontrado. ID: " + id);
         }
+
         repository.deleteById(id);
     }
 
     @Transactional
     public void aprovarPagamentoDoPedido(Long id){
-        Pedido pedido = repository.getPedidoByIdWithItems(id);
-        if (pedido == null){
-            throw new ResourceNotFoundException("Pedido id: "+ id +" não encontrado.");
+
+        Pedido pedido = repository.getPedidoByIdWithItens(id);
+        if(pedido == null){
+            throw new ResourceNotFoundException("Pedido id: " + id + " não encontrado.");
         }
 
         pedido.setStatus(Status.PAGO);
         repository.updatePedido(Status.PAGO, pedido);
     }
 
-    @Transactional
     public PedidoDTO updatePedidoStatus(Long id, StatusDTO statusDTO){
-        Pedido pedido = repository.getPedidoByIdWithItems(id);
-        if (pedido == null){
-            throw new ResourceNotFoundException("Pedido id: "+ id +" não encontrado.");
-        }
 
+        Pedido pedido = repository.getPedidoByIdWithItens(id);
+
+        if(pedido == null){
+            throw new ResourceNotFoundException("Pedido id: " + id + " não encontrado.");
+        }
         pedido.setStatus(statusDTO.getStatus());
         repository.updatePedido(statusDTO.getStatus(), pedido);
+
         return new PedidoDTO(pedido);
     }
+
     private void copyDtoToEntity(PedidoDTO dto, Pedido entity) {
 
         entity.setNome(dto.getNome());
         entity.setCpf(dto.getCpf());
 
-        List<ItemDoPedido> itens = new ArrayList<>();
+        List<ItemDoPedido> items = new ArrayList<>();
 
         for (ItemDoPedidoDTO itemDTO : dto.getItens()) {
             ItemDoPedido itemDoPedido = new ItemDoPedido();
@@ -120,9 +123,10 @@ public class PedidoService {
             itemDoPedido.setDescricao(itemDTO.getDescricao());
             itemDoPedido.setValorUnitario(itemDTO.getValorUnitario());
             itemDoPedido.setPedido(entity);
-            itens.add(itemDoPedido);
+            items.add(itemDoPedido);
         }
-        entity.setItens(itens);
+        entity.setItens(items);
     }
+
 
 }
