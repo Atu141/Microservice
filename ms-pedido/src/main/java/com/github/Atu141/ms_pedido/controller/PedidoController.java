@@ -2,6 +2,7 @@ package com.github.Atu141.ms_pedido.controller;
 
 import com.github.Atu141.ms_pedido.dto.PedidoDTO;
 import com.github.Atu141.ms_pedido.dto.StatusDTO;
+import com.github.Atu141.ms_pedido.kafka.PedidoProducer;
 import com.github.Atu141.ms_pedido.service.PedidoService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +21,17 @@ public class PedidoController {
 
     @Autowired
     private PedidoService service;
+
+    @Autowired
+    private PedidoProducer pedidoProducer;
+
+    //chamando o metodo producer
+    @PostMapping("/enviar")
+    public ResponseEntity<String> enviarMensagem(@RequestParam String mensagem){
+
+        pedidoProducer.enviarMensagem(mensagem);
+        return ResponseEntity.ok("Mensagem enviada para o kafka;" + mensagem);
+    }
 
     @GetMapping
     public ResponseEntity<List<PedidoDTO>> findAllPedidos() {
